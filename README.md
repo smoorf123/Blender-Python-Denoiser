@@ -59,3 +59,21 @@ Use cases for Total Variation Denoising using split-Bregman optimization include
 -   Image denoising while preserving sharp edges: TVD is particularly useful for images with complex textures or fine details where preserving sharp edges is crucial.
 
 -   Real-time image and video processing: TVD using split-Bregman optimization can be applied in real-time scenarios where noise reduction is required without sacrificing image quality.
+
+### Wavelet Denoising
+
+Wavelet denoising is an advanced technique used to reduce noise in images by exploiting the properties of wavelet transforms. It involves decomposing an image into different frequency bands using wavelet analysis and selectively removing noise from these bands.
+
+The noise reduction process in wavelet denoising occurs in two main steps: decomposition and thresholding.
+
+-   Decomposition: The image is decomposed into wavelet coefficients using a wavelet transform.
+
+-   Thresholding: The wavelet coefficients in the high-frequency bands are analyzed, and a thresholding operation is applied to identify and suppress noise.
+
+Wavelet denoising offers several advantages, including the ability to preserve edges and fine details while effectively reducing noise.
+
+Use cases for wavelet denoising include:
+
+-   Image denoising while preserving details: Wavelet denoising is particularly useful when noise reduction is required without sacrificing important image details.
+
+-   Compression and transmission applications: Wavelet denoising can be applied as a preprocessing step before compression or transmission of images.
