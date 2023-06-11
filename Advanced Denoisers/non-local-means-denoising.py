@@ -6,8 +6,8 @@ image = cv2.imread('./Blender-Denoiser/noisy-img.png')
 # Display the image
 cv2.imshow("Image", image)
 
-# Apply median filtering with a 5x5 kernel
-filtered_image = cv2.medianBlur(image, 5)
+# Apply non-local means denoising, 10 filter strength, 10 filter strength of color components, 7 size of template patch used to compute weights, 21 size of window used to compute weighted average
+filtered_image = cv2.fastNlMeansDenoisingColored(image, None, 12, 12, 7, 21)
 
 # Display the filtered image
 cv2.imshow('Filtered Image', filtered_image)

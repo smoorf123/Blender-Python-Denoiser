@@ -77,3 +77,13 @@ Use cases for wavelet denoising include:
 -   Image denoising while preserving details: Wavelet denoising is particularly useful when noise reduction is required without sacrificing important image details.
 
 -   Compression and transmission applications: Wavelet denoising can be applied as a preprocessing step before compression or transmission of images.
+
+### Non-Local Means Denoising
+
+Non-local Means (NLM) denoising is an advanced technique used to reduce noise in images by exploiting the redundancy present in natural images. It utilizes the idea that similar patches in an image have similar noise characteristics. NLM denoising works by averaging similar patches in a larger search window to estimate the true pixel value, effectively reducing noise while preserving image details.
+
+Use cases for Non-local Means denoising include:
+
+-   Image denoising with preservation of details: NLM denoising is particularly useful when noise reduction is desired without sacrificing important image details.
+
+-   Restoration of vintage or low-quality images: Non-local Means denoising can be applied to restore old or low-quality images by reducing noise and enhancing details.

@@ -6,7 +6,7 @@ image = cv2.imread('./Blender-Denoiser/noisy-img.png')
 # Display the image
 cv2.imshow("Image", image)
 
-# Apply gaussian filtering with a 5x5 kernel
+# Apply gaussian filtering with a 5x5 kernel, 0 implying that the standard deviation is calculated automatically
 filtered_image = cv2.GaussianBlur(image, (5, 5), 0)
 
 # Display the filtered image
