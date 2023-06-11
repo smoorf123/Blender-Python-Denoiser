@@ -1,0 +1,17 @@
+import skimage.restoration as skr   # Import the scikit-image library
+import cv2  # Import the OpenCV library
+
+# Read the image from appropriate path
+image = cv2.imread('./Blender-Denoiser/noisy-img.png')
+
+# Display the image
+cv2.imshow("Image", image)
+
+# Apply total variation denoising
+# weight specifies the degree of denoising, channel_axis specifies the axis of color channels with -1 being the last axis (color)
+filtered_image = skr.denoise_tv_bregman(image, weight=10, channel_axis=-1)
+
+# Display the filtered image
+cv2.imshow('Filtered Image', filtered_image)
+cv2.waitKey(0)  # Wait for a key press to exit
+cv2.destroyAllWindows()  # Close all windows
