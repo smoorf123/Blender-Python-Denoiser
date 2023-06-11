@@ -87,3 +87,13 @@ Use cases for Non-local Means denoising include:
 -   Image denoising with preservation of details: NLM denoising is particularly useful when noise reduction is desired without sacrificing important image details.
 
 -   Restoration of vintage or low-quality images: Non-local Means denoising can be applied to restore old or low-quality images by reducing noise and enhancing details.
+
+### BM3D Denoising
+
+BM3D (Block-Matching 3D) denoising is an advanced technique used for effectively reducing noise in images. It operates by exploiting similarities within groups of similar patches and achieves state-of-the-art denoising performance.
+
+Use cases for BM3D denoising include:
+
+-   Image denoising with high-quality results: BM3D is particularly useful when denoising is required without sacrificing important image details.
+
+-   Low-light or high-ISO photography: BM3D can be beneficial for denoising images captured in low-light conditions or with high ISO settings.

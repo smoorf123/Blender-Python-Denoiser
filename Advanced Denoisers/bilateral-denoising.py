@@ -6,7 +6,8 @@ image = cv2.imread('./Blender-Denoiser/noisy-img.png')
 # Display the image
 cv2.imshow("Image", image)
 
-# Apply gaussian filtering with a 5x5 kernel
+# Apply bilateral filtering
+# 9 is the diameter of the pixel neighborhood used, 75 is the sigma value for color space, 75 is the sigma value for coordinate space
 filtered_image = cv2.bilateralFilter(image, 9, 75, 75)
 
 # Display the filtered image

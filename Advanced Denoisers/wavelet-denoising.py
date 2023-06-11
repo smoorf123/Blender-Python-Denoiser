@@ -7,10 +7,10 @@ image = cv2.imread('./Blender-Denoiser/noisy-img.png')
 # Display the image
 cv2.imshow("Image", image)
 
-# Apply total variation denoising
-# channel_axis specifies the axis of color channels with -1 being the last axis (color)
+# Apply wavelet denoising
+# channel_axis specifies the axis of color channels with -1 being the last axis (color), convert2ycbcr converts the image to YCbCr color space
 filtered_image = skr.denoise_wavelet(
-    image, channel_axis=-1)
+    image, channel_axis=-1, convert2ycbcr=True)
 
 # Display the filtered image
 cv2.imshow('Filtered Image', filtered_image)
