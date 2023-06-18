@@ -10,11 +10,15 @@ image = img_as_float(
 cv2.imshow("Image", image)
 
 # Apply bm3d filtering
-# sigma_psd is the noise standard deviation, ALL_STAGES implies hard thresholding and wiener filtering are both applied
-filtered_image = bm3d.bm3d(
-    image, sigma_psd=0.1, stage_arg=bm3d.BM3DStages.ALL_STAGES)
+# sigma_psd is the noise standard deviation, ALL_STAGES implies hard thresholding
+# and wiener filtering are both applied
+def bm3d_dn(image):
+    filtered_image = bm3d.bm3d(
+        image, sigma_psd=0.1, stage_arg=bm3d.BM3DStages.ALL_STAGES)
+    return filtered_image
+
 
 # Display the filtered image
-cv2.imshow('Filtered Image', filtered_image)
+cv2.imshow('Filtered Image', bm3d_dn(image))
 cv2.waitKey(0)  # Wait for a key press to exit
 cv2.destroyAllWindows()  # Close all windows
