@@ -1,8 +1,9 @@
-# Import the necessary dependencies from the scikit-image library
+import sys
+sys.path.insert(0, "C:/Users/Somil/Desktop/VSCode-Python/Blender-Denoiser/Required_Dependencies/skimage")
+
 from skimage.restoration import denoise_wavelet, cycle_spin
 from skimage import io, img_as_float
-
-import numpy as np  # Import the NumPy library
+import numpy as np
 
 # Apply shift-invariant wavelet denoising
 # Sigma is the noise standard deviation
