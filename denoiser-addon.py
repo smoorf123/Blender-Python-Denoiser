@@ -1,12 +1,10 @@
 import os
 import numpy
 import cv2
-
-import bpy
 from bpy_extras.io_utils import ImportHelper
 from bpy.types import Panel, Operator, PropertyGroup
 from bpy.props import EnumProperty, PointerProperty
-
+import bpy
 
 bl_info = {
     "name": "Denoiser Select Add-on",
