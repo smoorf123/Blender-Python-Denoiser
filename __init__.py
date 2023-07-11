@@ -5,22 +5,39 @@ bl_info = {
     "blender": (2, 80, 0)
 }
 
+import os
+import sys
+import subprocess
+
+## INSTALL REQUIRED MODULES
+# path to python.exe
+python_exe = os.path.join(sys.prefix, 'bin', 'python.exe')
+
+# upgrade pip
+subprocess.call([python_exe, "-m", "ensurepip"])
+subprocess.call([python_exe, "-m", "pip", "install", "--upgrade", "pip"])
+
+# install required packages
+for package in ["bm3d", "scipy", "numpy", "opencv-python", "scikit-image"]:
+    subprocess.call([python_exe, "-m", "pip", "install", package])
+
+print("Required Modules Installed")
+
 from bpy_extras.io_utils import ImportHelper
 from bpy.types import Panel, Operator
 from bpy.props import PointerProperty
 import bpy
 
-import os
-from denoiser_functions import denoise, denoise_preview
-from Advanced_Denoisers import *
-from Traditional_Denoisers import *
+from .Advanced_Denoisers import *
+from .Traditional_Denoisers import *
+from .denoiser_functions import denoise, denoise_preview
 
 FILE_PATH = ""
 FILE_PATH_DENOISED = ""
 function_selected = ""
 
 functions_dict = {"Gaussian": gaussian_denoising.gaussian_dn, "Mean": mean_denoising.mean_dn, 
-                  "Median": mean_denoising.median_dn, "Bilateral": bilateral_denoising.bilateral_dn, 
+                  "Median": median_denoising.median_dn, "Bilateral": bilateral_denoising.bilateral_dn, 
                   "BM3D": bm3d_denoising.bm3d_dn, "NLM": non_local_means_denoising.nlm_dn, 
                   "TV": total_variation_denoising.tv_dn, "Wavelet": wavelet_denoising.wavelet_dn}
 
@@ -85,7 +102,6 @@ class SetSavePath(Operator, ImportHelper):
 
         return {'FINISHED'}
 
-
 class DENOISER_PREVIEW_operator(Operator):
     '''See a preview of the denoised output using the chosen algorithm'''
     bl_idname = "dn_prv.operator"
@@ -96,6 +112,8 @@ class DENOISER_PREVIEW_operator(Operator):
         return context.mode == "OBJECT"
 
     def execute(self, context):
+        function_selected = bpy.context.scene.scene_propname.my_enum
+
         if FILE_PATH:
             render()
             denoise_preview(FILE_PATH, functions_dict[function_selected])  # run denoiser and preview
@@ -104,7 +122,6 @@ class DENOISER_PREVIEW_operator(Operator):
                 {"ERROR"}, "You may not have set the save destination!")
 
         return {'FINISHED'}
-
 
 class DENOISE_operator(Operator):
     '''Render, Denoise and Save the Output to a Chosen Location'''
@@ -116,6 +133,8 @@ class DENOISE_operator(Operator):
         return context.mode == "OBJECT"
 
     def execute(self, context):
+        function_selected = bpy.context.scene.scene_propname.my_enum
+
         if FILE_PATH:
             render()
             denoise(FILE_PATH, FILE_PATH_DENOISED, functions_dict[function_selected])  # run denoiser
@@ -124,7 +143,6 @@ class DENOISE_operator(Operator):
                 {"ERROR"}, "You may not have set the save destination!")
 
         return {'FINISHED'}
-
 
 class DENOISER_PT_rendersettings(Panel):
     """ Tooltip """
@@ -155,7 +173,6 @@ class DENOISER_PT_rendersettings(Panel):
         row.scale_y = 1.5
         row.operator("dn.operator", icon="NONE")
 
-
 classes = [
     CustomDenoiser,
     SetSavePath,
@@ -169,13 +186,11 @@ def register():
         bpy.utils.register_class(cls)
         
     bpy.types.Scene.scene_propname = PointerProperty(type=CustomDenoiser)
-    function_selected = bpy.context.scene.scene_propname.my_enum
 
 def unregister():
     for cls in reversed(classes):
         bpy.utils.unregister_class(cls)
     del bpy.types.Scene.scene_propname
-
 
 if __name__ == '__main__':
     register()
