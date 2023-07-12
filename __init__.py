@@ -138,6 +138,8 @@ class DENOISE_operator(Operator):
         if FILE_PATH:
             render()
             denoise(FILE_PATH, FILE_PATH_DENOISED, functions_dict[function_selected])  # run denoiser
+            self.report(
+                {"INFO"}, "The Denoised render has been saved to the chosen location.")
         else:
             self.report(
                 {"ERROR"}, "You may not have set the save destination!")
