@@ -8,4 +8,4 @@ from skimage import img_as_ubyte
 def tv_dn(image):
     img = cv2.imread(image)
     filtered_image = denoise_tv_bregman(img, weight=10, channel_axis=-1)
-    return img_as_ubyte(filtered_image)
+    return img_as_ubyte(filtered_image) # convert to 8-bit image for display

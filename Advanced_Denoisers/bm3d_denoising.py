@@ -8,4 +8,4 @@ import cv2
 def bm3d_dn(image):
     img = img_as_float(cv2.imread(image))
     filtered_image = bm3d_rgb(img, sigma_psd = 0.02, colorspace='rgb')
-    return img_as_ubyte(filtered_image)
+    return img_as_ubyte(filtered_image) # convert to 8-bit image for display

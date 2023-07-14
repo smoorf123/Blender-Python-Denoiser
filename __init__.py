@@ -20,7 +20,7 @@ try:
     subprocess.call([python_exe, "-m", "ensurepip"])
     subprocess.call([python_exe, "-m", "pip", "install", "--upgrade", "pip"])
 
-# install required packages
+    # install required packages
     for package in ["bm3d", "scipy", "numpy", "opencv-python", "scikit-image"]:
         subprocess.call([python_exe, "-m", "pip", "install", package])
 
@@ -49,10 +49,9 @@ functions_dict = {"Gaussian": gaussian_denoising.gaussian_dn, "Mean": mean_denoi
                   "TV": total_variation_denoising.tv_dn, "Wavelet": wavelet_denoising.wavelet_dn}
 
 def render():
-
-    # Render Settings
     print("Rendering...")
 
+    # set render destination 
     bpy.context.scene.render.filepath = f"{FILE_PATH}\\non_denoised_{render_num}"
     bpy.ops.render.render(write_still=True)
 
@@ -60,6 +59,7 @@ def render():
 
 class CustomDenoiser(bpy.types.PropertyGroup):
 
+    # EnumProperty to choose denoising algorithm (drop-down menu)
     my_enum : bpy.props.EnumProperty(name="", description="Choose Denoising Algorithm",
                                     items=(
                                         ('Gaussian', "Gaussian",
@@ -81,7 +81,7 @@ class CustomDenoiser(bpy.types.PropertyGroup):
                                     ))
     
 class SetSavePath(Operator, ImportHelper):
-    '''Set the destination of both the noisy and denoised versions of the render'''
+    '''Set the destination of all saved files (renders and denoised images)'''
     bl_idname = "set_path.operator"
     bl_label = "Set Save Location"
 
@@ -91,7 +91,6 @@ class SetSavePath(Operator, ImportHelper):
 
     def execute(self, context):
         global FILE_PATH
-
         FILE_PATH = os.path.join(os.path.split(self.filepath)[
                                  0])
 
@@ -145,7 +144,7 @@ class DENOISE_operator(Operator):
         return {'FINISHED'}
 
 class DENOISER_PT_rendersettings(Panel):
-    """ Tooltip """
+    """ Main Panel """
 
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
@@ -157,18 +156,22 @@ class DENOISER_PT_rendersettings(Panel):
         layout = self.layout
         scene = context.scene
 
+        # set save path button
         row = layout.row()
         row.operator("set_path.operator", icon="NONE")
 
+        # algorithm selection drop-down menu
         layout.label(text="Choose an Algorithm:")
         prop_one = scene.scene_propname
         layout.prop(prop_one, "my_enum")
         box = layout.box()
 
+        # denoise preview button
         row = box.row()
         row.scale_y = 1.5
         row.operator("dn_prv.operator", icon="NONE")
 
+        # denoise button
         row = box.row()
         row.scale_y = 1.5
         row.operator("dn.operator", icon="NONE")
@@ -185,6 +188,7 @@ def register():
     for cls in classes:
         bpy.utils.register_class(cls)
         
+    # register the drop-down enum property specifically
     bpy.types.Scene.scene_propname = PointerProperty(type=CustomDenoiser)
 
 def unregister():

@@ -11,10 +11,9 @@ def denoise(FILE_PATH, FILE_PATH_DENOISED, function):
     save_image(denoised_img, FILE_PATH_DENOISED)
 
 def denoise_preview(FILE_PATH, function):
-    # Display the filtered image
     cv2.imshow('Denoised Image', function(FILE_PATH))
-    cv2.waitKey(0)  # Wait for a key press to exit
-    cv2.destroyAllWindows()  # Close all windows
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
     remove_image(FILE_PATH)
 
