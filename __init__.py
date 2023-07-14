@@ -1,6 +1,8 @@
 bl_info = {
     "name": "Denoiser Select Add-on",
-    "author": "Somil",
+    "author": "Somil Varshney",
+    "warning": "Python libraries are automatically installed using the internet.",
+    "description": "Add-on that allows users to denoise using custom denoising algorithms",
     "version": (0, 1),
     "blender": (2, 80, 0)
 }
@@ -9,19 +11,23 @@ import os
 import sys
 import subprocess
 
-## INSTALL REQUIRED MODULES
-# path to python.exe
-python_exe = os.path.join(sys.prefix, 'bin', 'python.exe')
+try:
+    ## INSTALL REQUIRED MODULES
+    # path to python.exe
+    python_exe = os.path.join(sys.prefix, 'bin', 'python.exe')
 
-# upgrade pip
-subprocess.call([python_exe, "-m", "ensurepip"])
-subprocess.call([python_exe, "-m", "pip", "install", "--upgrade", "pip"])
+    # upgrade pip
+    subprocess.call([python_exe, "-m", "ensurepip"])
+    subprocess.call([python_exe, "-m", "pip", "install", "--upgrade", "pip"])
 
 # install required packages
-for package in ["bm3d", "scipy", "numpy", "opencv-python", "scikit-image"]:
-    subprocess.call([python_exe, "-m", "pip", "install", package])
+    for package in ["bm3d", "scipy", "numpy", "opencv-python", "scikit-image"]:
+        subprocess.call([python_exe, "-m", "pip", "install", package])
 
-print("Required Modules Installed")
+    print("Required Modules Installed")
+except:
+    raise Exception("Required Modules could not be installed, please check your internet connection and re-register the addon (Edit > Preferences > Add-ons > Denoiser Select)")
+
 
 from bpy_extras.io_utils import ImportHelper
 from bpy.types import Panel, Operator
@@ -32,8 +38,9 @@ from .Advanced_Denoisers import *
 from .Traditional_Denoisers import *
 from .denoiser_functions import denoise, denoise_preview
 
+
 FILE_PATH = ""
-FILE_PATH_DENOISED = ""
+render_num = 1
 function_selected = ""
 
 functions_dict = {"Gaussian": gaussian_denoising.gaussian_dn, "Mean": mean_denoising.mean_dn, 
@@ -44,20 +51,10 @@ functions_dict = {"Gaussian": gaussian_denoising.gaussian_dn, "Mean": mean_denoi
 def render():
 
     # Render Settings
-    render = bpy.context.scene.render
-    scale = render.resolution_percentage / 100
-
-    WIDTH = int(render.resolution_x * scale)
-    HEIGHT = int(render.resolution_y * scale)
-
     print("Rendering...")
 
-    previous_path = bpy.context.scene.render.filepath
-    bpy.context.scene.render.filepath = FILE_PATH
-
+    bpy.context.scene.render.filepath = f"{FILE_PATH}\\non_denoised_{render_num}"
     bpy.ops.render.render(write_still=True)
-
-    bpy.context.scene.render.filepath = previous_path
 
     print("Rendering complete.")
 
@@ -93,13 +90,12 @@ class SetSavePath(Operator, ImportHelper):
         return context.mode == "OBJECT"
 
     def execute(self, context):
-        global FILE_PATH, FILE_PATH_DENOISED
+        global FILE_PATH
 
         FILE_PATH = os.path.join(os.path.split(self.filepath)[
-                                 0], "non-denoised.png").replace("\\", "/")
-        FILE_PATH_DENOISED = os.path.join(
-            FILE_PATH, "denoised.png").replace("\\", "/")
+                                 0])
 
+        print("Files will be saved here: ", FILE_PATH)
         return {'FINISHED'}
 
 class DENOISER_PREVIEW_operator(Operator):
@@ -116,7 +112,7 @@ class DENOISER_PREVIEW_operator(Operator):
 
         if FILE_PATH:
             render()
-            denoise_preview(FILE_PATH, functions_dict[function_selected])  # run denoiser and preview
+            denoise_preview(f"{FILE_PATH}\\non_denoised_{render_num}.png", functions_dict[function_selected])  # run denoiser and preview
         else:
             self.report(
                 {"ERROR"}, "You may not have set the save destination!")
@@ -133,11 +129,13 @@ class DENOISE_operator(Operator):
         return context.mode == "OBJECT"
 
     def execute(self, context):
+        global render_num
         function_selected = bpy.context.scene.scene_propname.my_enum
 
         if FILE_PATH:
             render()
-            denoise(FILE_PATH, FILE_PATH_DENOISED, functions_dict[function_selected])  # run denoiser
+            denoise(f"{FILE_PATH}\\non_denoised_{render_num}.png", f"{FILE_PATH}\\{function_selected}_denoised_{render_num}.png", functions_dict[function_selected])  # run denoiser
+            render_num+=1
             self.report(
                 {"INFO"}, "The Denoised render has been saved to the chosen location.")
         else:

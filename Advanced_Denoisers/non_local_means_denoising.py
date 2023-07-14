@@ -5,5 +5,5 @@ import cv2
 # 21 size of window used to compute weighted average
 def nlm_dn(image):
     img = cv2.imread(image)
-    filtered_image = cv2.fastNlMeansDenoisingColored(img, None, 12, 12, 7, 21)
+    filtered_image = cv2.fastNlMeansDenoisingColored(img, None, 8, 8, 7, 21)
     return filtered_image

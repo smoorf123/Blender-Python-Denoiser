@@ -1,6 +1,6 @@
 bl_info = {
     "name": "Denoiser Select Add-on",
-    "author": "Somil",
+    "author": "Somil Varshney",
     "version": (0, 1),
     "blender": (2, 80, 0)
 }
